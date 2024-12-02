@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="bg-[#F3F3F3] mx-auto pt-20 flex flex-col justify-center h-screen w-full">
-      <div className="md:py-20 px-5 md:px-20 flex flex-col md:flex-row md:justify-between items-center bg-orange-30">
+    <section className="bg-[#F3F3F3] mx-auto flex flex-col justify-center min-h-screen w-full">
+      <div className="md:py-0 px-5 md:px-20 flex flex-col md:flex-row md:justify-between items-center bg-orange-30">
         <div className="left bg-pink-40 mt-10">
           <p className="md:text-lg lg:text-xl text-base w-[80%]">Save time and money!</p>
           <p className="md:text-lg lg:text-xl text-base w-[80%]">

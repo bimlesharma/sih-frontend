@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import Navbar from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function SignupPage() {
   const {
@@ -17,7 +19,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen pt-20 flex items-center justify-center bg-[#f3f3f3]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md bg-white p-6 rounded shadow-md"

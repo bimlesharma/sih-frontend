@@ -6,48 +6,66 @@ import { useState } from "react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Replace this with real login state
+
+  const handleLogin = () => setIsLoggedIn(true); // Dummy login handler
+  const handleLogout = () => setIsLoggedIn(false); // Dummy logout handler
 
   return (
-    <header className="bg-[#F3f3f3,0] fixed w-full z-50 py-3  text-gray-600">      
-      <div className="w-full lg:px-20 md:px-8 mx-auto px-4 sm:px-6 flex justify-between items-center h-16">
-        <div className=" h-14 rounded-full shadow-sm px-2 py-2 gap-2 pr-4 flex bg-white items-center">
+    <header className="bg-[#F3f3f3] absolute text-sm bg-gray-00 w-full z-50 py-2 text-gray-600">
+      <div className="w-full lg:px-20 md:px-8 mx-auto px-4 sm:px-6 flex justify-between items-center h-10">
+        <div className="h-10 rounded-full shadow-sm px-1 py gap-2 pr-4 flex bg-white items-center">
           <Image
             src="/logo.png"
-            className=" rounded-full bg-black"
-            width={40}
-            height={40}
+            className="rounded-full bg-black"
+            width={32}
+            height={32}
             alt="Logo"
           />
-          <Link href="/" className="text-gray-900 font-bold">
+          <Link href="/" className="text-gray-900 font-semibold">
             Platform Name | Brahma Bytes
           </Link>
         </div>
-        <div className=" hidden lg:flex space-x-6 shadow-sm rounded-full px-6 py-2 bg-white  items-center h-14 font-semibold">
-          <nav className="">
-            <Link href="/" className="hover:text-gray-900 px-4">
+
+        <div className="hidden lg:flex space-x-6 shadow-sm rounded-full px-2 py-2 bg-white items-center h-10">
+          <nav>
+            <Link href="/" className="hover:text-gray-900 px-3">
               Home
             </Link>
-            <Link href="#features" className="hover:text-gray-900 px-4">
+            <Link href="#features" className="hover:text-gray-900 px-3">
               Features
             </Link>
-            <Link href="#how-it-works" className="hover:text-gray-900 px-4">
+            <Link href="#how-it-works" className="hover:text-gray-900 px-3">
               How It Works
             </Link>
-            <Link href="#contact" className="hover:text-gray-900 px-4">
+            <Link href="#contact" className="hover:text-gray-900 px-3">
               Contact Us
             </Link>
-            <Link href="/login" className="hover:text-gray-900 px-4">
-              Login
-            </Link>
-            <Link href="/signup" className="hover:text-gray-900 px-4">
-              Sign Up
-            </Link>
+            {/* Render dynamic links based on login state */}
+            {isLoggedIn ? (
+              <>
+                <Link href="/profile" className="hover:text-gray-900 px-3">
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="hover:text-gray-900 px-3"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="hover:text-gray-900 px-3">
+                  Login
+                </Link>
+                <Link href="/signup" className="hover:text-gray-900 px-3">
+                  Sign Up
+                </Link>
+              </>
+            )}
           </nav>
         </div>
-
-        {/* <button className="hidden md:block bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md">
-          Get Started
-        </button> */}
 
         {/* Mobile Menu */}
         <div className="lg:hidden">
@@ -74,7 +92,7 @@ export default function Header() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white space-y-2 py-4">
+        <div className="lg:hidden bg-white space-y-2 py-4">
           <Link href="/" className="block px-4 hover:text-gray-900">
             Home
           </Link>
@@ -87,12 +105,29 @@ export default function Header() {
           <Link href="#contact" className="block px-4 hover:text-gray-900">
             Contact Us
           </Link>
-          <Link href="/login" className="block px-4 hover:text-gray-900">
-            Login
-          </Link>
-          <Link href="/signup" className="block px-4 hover:text-gray-900">
-            Sign Up
-          </Link>
+          {/* Render dynamic mobile links based on login state */}
+          {isLoggedIn ? (
+            <>
+              <Link href="/profile" className="block px-4 hover:text-gray-900">
+                Profile
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="block px-4 hover:text-gray-900"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="block px-4 hover:text-gray-900">
+                Login
+              </Link>
+              <Link href="/signup" className="block px-4 hover:text-gray-900">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       )}
     </header>
