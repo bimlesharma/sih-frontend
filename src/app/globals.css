@@ -2,9 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
+} */
+:root {
+  font-family: var(--font-poppins), sans-serif;
 }
+
 
 @layer base {
   :root {

@@ -1,6 +1,6 @@
 export default function HowItWorks() {
     return (
-      <section id="how-it-works" className="py-20 bg-white text-gray-800">
+      <section id="how-it-works" className="py-20 bg-[#f3f3f3] text-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center">How It Works</h2>
           <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-8">

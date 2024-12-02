@@ -1,6 +1,6 @@
 export default function Testimonials() {
     return (
-      <section className="py-20 bg-gray-100 text-gray-800">
+      <section className="py-20 bg-white text-gray-800">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center">What Our Users Say</h2>
           <div className="mt-10 space-y-6">

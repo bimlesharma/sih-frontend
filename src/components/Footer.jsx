@@ -20,7 +20,10 @@ export default function Footer() {
                   <a href="#contact" className="hover:text-gray-300">Contact Us</a>
                 </li>
                 <li>
-                  <a href="/login" className="hover:text-gray-300">Login/Sign Up</a>
+                  <a href="/login" className="hover:text-gray-300">Login</a>
+                </li>
+                <li>
+                  <a href="/signup" className="hover:text-gray-300">Sign Up</a>
                 </li>
               </ul>
             </div>
