@@ -1,4 +1,5 @@
 import Image from "next/image";
+import {Button} from "@/components/ui/button"
 
 export default function Hero() {
   return (
@@ -16,9 +17,9 @@ export default function Hero() {
           </p>
           <h1 className="md:text-7xl lg:text-9xl text-5xl my-2">Platform Name</h1>
           <div className="w-full">
-            <button className=" bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md">
+            <Button className=" bg-blue-500 hover:bg-blue-600 text-white px-6 py-3">
               Get Started
-            </button>
+            </Button>
           </div>
           {/* <h1 className=" text-9xl ">
             Revolutionizing Procurement Process

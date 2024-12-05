@@ -2,6 +2,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center bg-[#f3f3f3}">
+    <div className="min-h-screen pt-20  text-sm flex items-center justify-center bg-[#f3f3f3}">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-md bg-white p-6 rounded shadow-md"
@@ -27,12 +28,10 @@ export default function LoginPage() {
 
         {/* Email */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium">
-            Email
-          </label>
           <input
             id="email"
             type="email"
+            placeholder="Email"
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -49,12 +48,10 @@ export default function LoginPage() {
 
         {/* Password */}
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium">
-            Password
-          </label>
           <input
             id="password"
             type="password"
+            placeholder="Password"
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -72,10 +69,17 @@ export default function LoginPage() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="w-full mb-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
         >
           Login
         </button>
+        <div className="flex flex-col items-end gap-2">
+          <Link href="/forgot-password" className="text-blue-600 hover:text-blue-800">
+            Forgot your password?
+          </Link>
+        <Link className=" " href="/signup">Don't have an account? <span className="underline text-blue-600"> Sign up here.</span> 
+        </Link>
+        </div>
       </form>
     </div>
   );

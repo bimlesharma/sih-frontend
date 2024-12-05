@@ -55,10 +55,10 @@ export default function MakeModelSearch() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-white px-4 text-sm sm:px-8 md:px-16 lg:pt-14 lg:px-0">
+    <div className="min-h-screen flex flex-col items-center bg- px-4 text-sm sm:px-8 md:px-16 lg:pt-14 lg:px-0">
       <hr className="w-full border-gray-200" />
       <div className="  w-full">
-        <div className="flex flex-col lg:flex-row w-full justify-center gap-5  py-3 bg-yellow-40 lg:px-20">
+        <div className="flex flex-col lg:flex-row w-full justify-center gap-5 bg-white  py-3 bg-yellow-40 lg:px-20">
           <div className=" font-bold h-10 py-6 shadow rounded-full gap-2 flex bg-gray-100 items-center w-full  lg:w-auto mx-auto px-2 sm:mx-0">
             {/* <Image
             src="/logo.png"
