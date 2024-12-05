@@ -6,7 +6,7 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen text-sm flex flex-col items-center justify-center py-20 lg:py-0">
       <h1 className="text-3xl font-bold mb-6">Select a Search Option</h1>
-      <section id="features" className=" text-gray-800">
+      <section className=" text-gray-800">
         <div className="max-w-7xl  mx-auto px-5 lg:px-20">
           <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-20 ">
             <FeatureCard

@@ -1,134 +1,150 @@
 "use client";
-import React from "react";
-// import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
+export default function Signup() {
+  const router = useRouter();
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-export default function SignupPage() {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   watch,
-  //   formState: { errors },
-  // } = useForm();
-
-  // const onSubmit = (data) => {
-  //   console.log("Signup Data:", data);
-  //   // Simulate signup success
-  //   alert("Signup successful!");
-  // };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (user.password !== user.confirmPassword) {
+      toast.error("Password and Confirm Password do not match", {
+        position: "bottom-center",
+      });
+      return;
+    }
+    try {
+      const response = await axios.post("/api/users/signup", {
+        username: user.username,
+        email: user.email,
+        password: user.password,
+      });
+      toast.success(response.data.message, {
+        position: "top-center",
+      });
+      setUser({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
+    } catch (error) {
+      console.error(error.response.data);
+    }
   };
 
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
-
-  console.log("Name:", name)
   return (
-    <div className="min-h-screen text-sm pt-20 flex items-center justify-center bg-[#f3f3f3]">
-      <form
-        // onSubmit={handleSubmit(onSubmit)}
-        onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white p-6 rounded shadow-md"
-      >
-        <h1 className="text-2xl font-bold mb-4 text-center">Sign Up</h1>
+    <div className="min-h-screen flex items-center">
+      <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+        <h2 className="font-bold text-xl text-center text-neutral-800 dark:text-neutral-200">
+          Welcome
+        </h2>
+        <p className="text-neutral-600 text-center text-sm max-w-sm mt-2 dark:text-neutral-300">
+          Sign up to get started with our platform
+        </p>
 
-        {/* Full Name */}
-        <div className="mb-4">
-          <input
-            onChange={(e) => setName(e.target.value)}
-            id="name"
-            type="text"
-            placeholder="Full Name"
-            // {...register("name", { required: "Full Name is required" })}
-            className="mt-1 block w-full px-3 py-2 border rounded"
-          />
-          {/* {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )} */}
-        </div>
+        <form className="my-8" onSubmit={handleSubmit}>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+            <LabelInputContainer>
+              {/* <Label htmlFor="username">Username</Label> */}
+              <Input
+                id="username"
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
+                value={user.username}
+                placeholder="Username"
+                type="text"
+              />
+            </LabelInputContainer>
+          </div>
+          <LabelInputContainer className="mb-4">
+            {/* <Label htmlFor="email">Email Address</Label> */}
+            <Input
+              id="email"
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              value={user.email}
+              placeholder="Email"
+              type="email"
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            {/* <Label htmlFor="password">Password</Label> */}
+            <Input
+              id="password"
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              value={user.password}
+              placeholder="Password"
+              type="password"
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            {/* <Label htmlFor="confirmPassword">Confirm Password</Label> */}
+            <Input
+              id="confirmPassword"
+              onChange={(e) =>
+                setUser({ ...user, confirmPassword: e.target.value })
+              }
+              value={user.confirmPassword}
+              placeholder="Confirm Password"
+              type="password"
+            />
+          </LabelInputContainer>
 
-        {/* Email */}
-        <div className="mb-4">
-          <input
-          onChange={(e) => setEmail(e.target.value)}
-            id="email"
-            type="email"
-            placeholder="Email"
-            // {...register("email", {
-            //   required: "Email is required",
-            //   pattern: {
-            //     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            //     message: "Invalid email format",
-            //   },
-            // })}
-            className="mt-1 block w-full px-3 py-2 border rounded"
-          />
-          {/* {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )} */}
-        </div>
+          <button
+            className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+            type="submit"
+          >
+            Sign up &rarr;
+            <BottomGradient />
+          </button>
 
-        {/* Password */}
-        <div className="mb-4">
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            id="password"
-            type="password"
-            placeholder="Password"
-            // {...register("password", {
-            //   required: "Password is required",
-            //   minLength: {
-            //     value: 6,
-            //     message: "Password must be at least 6 characters",
-            //   },
-            // })}
-            className="mt-1 block w-full px-3 py-2 border rounded"
-          />
-          {/* {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-          )} */}
-        </div>
+          <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
 
-        {/* Confirm Password */}
-        {/* <div className="mb-4">
-          <input
-            onChange={(e) => setPassword(e.target.value)}
-            id="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            // {...register("confirmPassword", {
-            //   required: "Please confirm your password",
-            //   validate: (value) =>
-            //     value === watch("password") || "Passwords do not match",
-            // })}
-            className="mt-1 block w-full px-3 py-2 border rounded"
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword.message}
-            </p>
-          )}
-        </div> */}
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full mb-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-        >
-          Sign Up
-        </button>
-        <div className="text-red-600 font-semibold">{error}</div>
-
-        <div className="flex flex-col items-end gap-2">
-        <Link className=" " href="/login">Already have an account? <span className="underline text-blue-600"> Login here.</span> 
-        </Link>
-        </div>
-      </form>
+          <div className="flex items-center justify-center space-x-2">
+            <span className="text-neutral-600 dark:text-neutral-300">
+              Already have an account?
+            </span>
+            <Toaster />
+            <Link
+              href={"/login"}
+              className="text-neutral-800 dark:text-neutral-200 font-medium hover:underline"
+            >
+              Login
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
+
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+    </>
+  );
+};
+
+const LabelInputContainer = ({ children, className }) => {
+  return (
+    <div className={cn("flex flex-col space-y-2 w-full", className)}>
+      {children}
+    </div>
+  );
+};

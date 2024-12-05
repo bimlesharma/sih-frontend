@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     }
     const { username, email } = user;
     return NextResponse.json({
+      id: id,
       username: username,
       email: email,
       success: true,
