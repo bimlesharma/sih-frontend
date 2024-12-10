@@ -1,188 +1,61 @@
 "use client";
+
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-export default function ForgotPasswordPage() {
-  const router = useRouter();
-  const [step, setStep] = useState("request"); // 'request', 'verify', or 'reset'
+export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // Handle sending OTP
-  const handleSendOtp = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage("");
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/forgot-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const response = await axios.post("/api/users/forgot-password", { email });
+      
+      toast.success(response.data.message || "Reset link sent to your email.", { 
+        position: "top-center" 
+      });
 
-      if (response.ok) {
-        setMessage("OTP sent to your email. Please check your inbox.");
-        setStep("verify");
-      } else {
-        setMessage("Error sending OTP. Please try again.");
-      }
+      setEmail("");
     } catch (error) {
-      setMessage("An error occurred. Please try again.");
-    }
-    setLoading(false);
-  };
-
-  // Handle verifying OTP
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify-otp`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, otp }),
-        }
+      toast.error(
+        error.response?.data?.message || "Something went wrong.", 
+        { position: "bottom-center" }
       );
-
-      if (response.ok) {
-        setMessage("OTP verified successfully. You can now reset your password.");
-        setStep("reset");
-      } else {
-        setMessage("Invalid OTP. Please try again.");
-      }
-    } catch (error) {
-      setMessage("An error occurred. Please try again.");
     }
-    setLoading(false);
-  };
-
-  // Handle password reset
-  const handleResetPassword = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/reset-password`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, otp, newPassword }),
-        }
-      );
-
-      if (response.ok) {
-        setMessage("Password reset successful. Redirecting to login...");
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
-      } else {
-        setMessage("Failed to reset password. Please try again.");
-      }
-    } catch (error) {
-      setMessage("An error occurred. Please try again.");
-    }
-    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f3f3f3]">
-      <form
-        onSubmit={
-          step === "request"
-            ? handleSendOtp
-            : step === "verify"
-            ? handleVerifyOtp
-            : handleResetPassword
-        }
-        className="w-full max-w-md bg-white p-6 rounded shadow-md"
-      >
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          {step === "request"
-            ? "Forgot Password"
-            : step === "verify"
-            ? "Verify OTP"
-            : "Reset Password"}
-        </h1>
+    <div className="min-h-screen flex items-center">
+      <div className="max-w-md w-full mx-auto rounded-lg p-8 shadow-lg bg-white dark:bg-gray-800">
+        <h2 className="text-xl font-bold text-center text-gray-800 dark:text-gray-200">
+          Forgot Password
+        </h2>
+        <p className="text-center text-sm text-gray-600 mt-2 dark:text-gray-300">
+          Enter your email to receive a password reset link.
+        </p>
 
-        {/* Request OTP Step */}
-        {step === "request" && (
+        <form onSubmit={handleSubmit} className="mt-8">
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium">
-              Enter your email
-            </label>
-            <input
-              id="email"
+            <Input
               type="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded"
               required
+              className="w-full p-3 border rounded-lg"
             />
           </div>
-        )}
 
-        {/* Verify OTP Step */}
-        {step === "verify" && (
-          <div className="mb-4">
-            <label htmlFor="otp" className="block text-sm font-medium">
-              Enter OTP
-            </label>
-            <input
-              id="otp"
-              type="text"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-        )}
-
-        {/* Reset Password Step */}
-        {step === "reset" && (
-          <div className="mb-4">
-            <label htmlFor="newPassword" className="block text-sm font-medium">
-              New Password
-            </label>
-            <input
-              id="newPassword"
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border rounded"
-              required
-            />
-          </div>
-        )}
-
-        <button
-          type="submit"
-          className={`w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 ${
-            loading ? "cursor-wait" : ""
-          }`}
-          disabled={loading}
-        >
-          {loading
-            ? "Processing..."
-            : step === "request"
-            ? "Send OTP"
-            : step === "verify"
-            ? "Verify OTP"
-            : "Reset Password"}
-        </button>
-
-        {message && <p className="mt-4 text-center">{message}</p>}
-      </form>
+          <button
+            type="submit"
+            className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Send Reset Link
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -3,16 +3,19 @@ import "./globals.css";
 import Navbar from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast";
+
 
 const poppins = Poppins({
-  subsets: ["latin"], // Subsets optimize the font for specific languages.
-  weight: ["400", "600", "700"], // Define font weights you want to include.
-  variable: "--font-poppins", // Optional: Define a custom CSS variable.
+  subsets: ["latin"], 
+  weight: ["400", "600", "700"], 
+  variable: "--font-poppins",
 });
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={poppins.variable}>
       <body className="h-screen bg-[#F3F3F3]">
+          <Toaster />
           <Navbar />
           {children}
           <Footer />

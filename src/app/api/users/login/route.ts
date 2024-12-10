@@ -34,6 +34,14 @@ export async function POST(request: NextRequest) {
       expiresIn: "1h",
     });
 
+    // Check if the user is verified
+    if (!user.isVerified) {
+      return NextResponse.json(
+        { message: "Your email is not verified. Please check your inbox & verify your email to log in." },
+        { status: 403 }
+      );
+    }
+
     const response = NextResponse.json(
       {
         message: "Login successful",

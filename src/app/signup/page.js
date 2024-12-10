@@ -68,6 +68,7 @@ export default function Signup() {
                 value={user.username}
                 placeholder="Username"
                 type="text"
+                required
               />
             </LabelInputContainer>
           </div>
@@ -79,6 +80,7 @@ export default function Signup() {
               value={user.email}
               placeholder="Email"
               type="email"
+              required
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
@@ -89,6 +91,8 @@ export default function Signup() {
               value={user.password}
               placeholder="Password"
               type="password"
+              minLength="6"
+              required
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-8">
@@ -101,6 +105,7 @@ export default function Signup() {
               value={user.confirmPassword}
               placeholder="Confirm Password"
               type="password"
+              required
             />
           </LabelInputContainer>
 
