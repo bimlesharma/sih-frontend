@@ -9,17 +9,17 @@ export default function Features() {
           <FeatureCard
             title="Make/Model Search"
             description="Find products by their make and model seamlessly."
-            img="/logo.png"
+            img="/img/f3.jpg"
           />
           <FeatureCard
             title="Specification Search"
             description="Filter products with detailed specification criteria."
-            img="/logo.png"
+            img="/img/f2.jpg"
           />
           <FeatureCard
             title="Service Search"
             description="Locate services tailored to your needs."
-            img="/logo.png"
+            img="/img/f1.jpg"
           />
         </div>
       </div>
@@ -29,8 +29,8 @@ export default function Features() {
 
 function FeatureCard({ title, description, img }) {
   return (
-    <div className="bg-[#f3f3f3] shadow-md p-6 w-auto rounded-lg text-center flex flex-col justify-center items-center">
-      <Image src={img} alt="feature" width={300} height={300} className=" w-[100px] md:w-[120px] lg:w-[180px] py-5 rounded-lg"/>
+    <div className="bg-[#f3f3f3] shadow-md p-6 w-auto rounded-3xl text-center flex flex-col justify-center items-center">
+      <Image src={img} alt="feature" width={300} height={300} className=" w-[100px] md:w-[120px] lg:w-[180px] my-6 bg-pink-600 rounded-xl"/>
       <h3 className="text-xl font-bold">{title}</h3>
       <p className="mt-2 text-sm text-gray-600">{description}</p>
     </div>

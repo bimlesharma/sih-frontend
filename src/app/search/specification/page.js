@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function SpecificationSearch() {
   const {
@@ -10,19 +10,31 @@ export default function SpecificationSearch() {
     formState: { errors },
   } = useForm();
   const [searchResults, setSearchResults] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(null); // Store the search query
-  const [isSearchSubmitted, setIsSearchSubmitted] = useState(false); // Control form view
-  const router = useRouter(); // Access router for navigation
+  const [searchQuery, setSearchQuery] = useState(null);
+  const [isSearchSubmitted, setIsSearchSubmitted] = useState(false);
+  const router = useRouter();
 
-  const [searchType, setSearchType] = useState(""); // Store selected search type
-  const [specifications, setSpecifications] = useState([]); // Store specification tags
-  const [specInput, setSpecInput] = useState(""); // Input for specifications
+  const [searchType, setSearchType] = useState("");
+  const [specifications, setSpecifications] = useState([]);
+  const [specInput, setSpecInput] = useState("");
 
-  // Handle search type selection and page redirection
+  const pathname = usePathname(); 
+
+  useEffect(() => {
+    const pathSegments = pathname.split("/");
+    const currentType = pathSegments[pathSegments.length - 1];
+    if (["make-model", "specification", "service"].includes(currentType)) {
+      setSearchType(`search/${currentType}`);
+    } else {
+      setSearchType("");
+    }
+  }, [pathname]);
+
   const handleSearchTypeChange = (e) => {
-    setSearchType(e.target.value);
-    if (e.target.value) {
-      router.push(`/${e.target.value}`); // Navigate to the selected search type's page
+    const selectedType = e.target.value;
+    setSearchType(selectedType);
+    if (selectedType) {
+      router.push(`/${selectedType}`);
     }
   };
 
@@ -43,8 +55,8 @@ export default function SpecificationSearch() {
 
   const onSubmit = (data) => {
     console.log("Specification Search Data:", { ...data, specifications });
-    setSearchQuery({ ...data, specifications }); // Store query
-    setIsSearchSubmitted(true); // Toggle view
+    setSearchQuery({ ...data, specifications });
+    setIsSearchSubmitted(true)
 
     // Simulated data for output table
     const results = [
@@ -77,12 +89,13 @@ export default function SpecificationSearch() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center text-sm lg:pt-14 bg-white px-4 sm:px-8 md:px-16 lg:px-0">
-      <div className="w-full">
-        <div className="flex flex-col lg:flex-row w-full justify-center gap-5 py-3 bg-yellow-40 lg:px-20">
-          <div className="font-bold h-10 py-6 shadow rounded-full gap-2 flex bg-gray-100 items-center w-full lg:w-auto mx-auto px-2 sm:mx-0">
+    <div className="min-h-screen pt-20 flex flex-col items-center text-sm lg:pt-16 bg-white px-4 sm:px-8 md:px-16 lg:px-0">
+      <div className="w-full items-center flex flex-col">
+        <div className="flex flex-col w-full lg:w-1/2 justify-center gap-5 py-3 bg-yellow-40 lg:px-20">
+          <div className="font-bold flex flex-col h- py-2 shadow rounded-3xl gap-2 bg-gray-100 items-center w-full lg:w-auto mx-auto px-2 sm:mx-0">
+          <h2>Select search type</h2>
             <select
-              className="px-2 py-2 rounded-full font-semibold w-full lg:w-auto border"
+              className="px-2 py-2 rounded-full font-semibold w-full  border"
               onChange={handleSearchTypeChange}
               value={searchType}
             >
@@ -96,7 +109,7 @@ export default function SpecificationSearch() {
           {/* Search Form */}
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="bg-gray-100 flex flex-col lg:flex-row shadow gap-2 items-center justify-between rounded-3xl lg:rounded-3xl px-2 py-2 lg:py-0 lg:w-auto mt-4 lg:mt-0"
+            className=" bg-gray-100 flex flex-col lg:flex-ro shadow gap-2 items-center justify-between rounded-3xl lg:rounded-3xl px-2 py-2 lg:w-auto mt-4 lg:mt-0"
           >
             <div className="w-full">
               <input
@@ -104,7 +117,7 @@ export default function SpecificationSearch() {
                 type="text"
                 placeholder="Item Name"
                 {...register("itemName", { required: "Item Name is required" })}
-                className="block px-3 py-2 border w-full lg:w-auto rounded-full"
+                className="block px-3 py-2 border w-full rounded-full"
               />
               {errors.itemName && (
                 <p className="text-red-500 text-sm mt-1">
@@ -113,12 +126,12 @@ export default function SpecificationSearch() {
               )}
             </div>
 
-            <div className="w-full lg:w-1/4">
+            <div className="w-full ">
               <select
                 id="itemType"
                 placeholder="Item Type"
                 {...register("itemType", { required: "Item Type is required" })}
-                className="block px-3 py-2 border w-full lg:w-auto rounded-3xl"
+                className="block px-3 py-2 border w-full rounded-3xl"
               >
                 <option value="">Select Item Type</option>
                 <option value="Electronic">Electronic</option>
@@ -132,11 +145,30 @@ export default function SpecificationSearch() {
               )}
             </div>
 
-            <div className="w-full lg:w-1/4">
-              <div className="flex flex-wrap gap-2 w-full lg:w-auto rounded-3xl">
+            <div className="w-full specs flex gap-2">
+            <div className="w-1/2 specification">
+              <select
+                id="itemType"
+                placeholder="Item Type"
+                {...register("itemType", { required: "Item Type is required" })}
+                className="block px-3 py-2 border w-full rounded-3xl"
+              >
+                <option value="">Select Specification</option>
+                <option value="Electronic">Electronic</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Machinery">Machinery</option>
+              </select>
+              {errors.itemType && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.itemType.message}
+                </p>
+              )}
+            </div>
+            <div className="w-1/2 ">
+              <div className="flex flex-wrap gap-2 w-full rounded-3xl">
                 <input
                   type="text"
-                  placeholder="Specifications"
+                  placeholder="Value"
                   value={specInput}
                   onChange={handleSpecInputChange}
                   onKeyDown={handleSpecInputKeyDown}
@@ -144,10 +176,13 @@ export default function SpecificationSearch() {
                 />
               </div>
             </div>
+            </div>
+
+            
 
             <button
               type="submit"
-              className="w-full lg:w-auto px-5 bg-gray-600 text-white py-2 rounded-full hover:bg-gray-900 mt-4 sm:mt-0"
+              className="w-full  px-5 bg-gray-600 text-white py-2 rounded-full hover:bg-gray-900 mt-4 sm:mt-0"
             >
               Search
             </button>

@@ -12,19 +12,19 @@ export default function SearchPage() {
             <FeatureCard
               title="Make/Model Search"
               description="Find products by their make and model seamlessly."
-              img="/logo.png"
+              img="/img/f3.jpg"
               href="/search/make-model"
             />
             <FeatureCard
               title="Specification Search"
               description="Filter products with detailed specification criteria."
-              img="/logo.png"
+              img="/img/f2.jpg"
               href="/search/specification"
             />
             <FeatureCard
               title="Service Search"
               description="Locate services tailored to your needs."
-              img="/logo.png"
+              img="/img/f1.jpg"
               href="/search/service"
             />
           </div>
@@ -36,13 +36,13 @@ export default function SearchPage() {
 
 function FeatureCard({ title, description, img, href }) {
   return (
-    <div className="bg-white shadow-md p-6 rounded-lg text-center flex flex-col justify-center items-center">
+    <div className="bg-gray-200 shadow-md p-6 rounded-3xl text-center flex flex-col justify-center items-center">
       <Image
         src={img}
         alt="feature"
         width={200}
         height={200}
-        className=" w-[100px] md:w-[120px] lg:w-[200px] py-5 rounded-lg"
+        className=" w-[100px] md:w-[120px] lg:w-[200px] my-5 rounded-xl"
       />
       <h3 className="text-2xl font-bold">{title}</h3>
       <p className="my-2 text-gray-600">{description}</p>
