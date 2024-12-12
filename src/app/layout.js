@@ -4,6 +4,7 @@ import Navbar from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "next-themes";
 
 
 const poppins = Poppins({
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body className="h-screen bg-[#F3F3F3]">
           <Toaster />
           <Navbar />
+          {/* <ThemeProvider attribute="class">{children}</ThemeProvider> */}
           {children}
           <Footer />
       </body>

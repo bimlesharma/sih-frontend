@@ -9,3 +9,35 @@
   font-family: var(--font-poppins), sans-serif;
 }
 
+/* globals.css */
+html {
+  scroll-behavior: smooth;
+}
+
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+} */
+/* 
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
+} */
+
+
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: Custom global styles */
+/* body {
+  @apply bg-white text-black;
+} */
+/* 
+body.dark {
+  @apply bg-gray-900 text-white;
+}
+ */

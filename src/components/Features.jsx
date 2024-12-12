@@ -30,7 +30,7 @@ export default function Features() {
 function FeatureCard({ title, description, img }) {
   return (
     <div className="bg-[#f3f3f3] shadow-md p-6 w-auto rounded-3xl text-center flex flex-col justify-center items-center">
-      <Image src={img} alt="feature" width={300} height={300} className=" w-[100px] md:w-[120px] lg:w-[180px] my-6 bg-pink-600 rounded-xl"/>
+      <Image src={img} alt="feature" width={300} height={300} className=" w-[100px] md:w-[120px] lg:w-[180px] my-6 rounded-xl"/>
       <h3 className="text-xl font-bold">{title}</h3>
       <p className="mt-2 text-sm text-gray-600">{description}</p>
     </div>

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+// import ThemeToggle from '@/components/ThemeToggle';
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -165,6 +167,9 @@ export default function Header() {
               </Link>
             </>
           )}
+
+          {/*  */}
+          {/* <ThemeToggle /> */}
         </div>
       )}
     </header>

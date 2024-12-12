@@ -2,6 +2,8 @@
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import DownloadPDF from "@/components/DownloadPDF";
+import ProductTrendChart from "@/components/ProductTrendChart";
 import Image from "next/image";
 import axios from "axios";
 import cors from "cors";
@@ -76,8 +78,6 @@ export default function MakeModelSearch() {
             type: data.itemType,
             make: data.make,
 
-
-
             model: data.model,
           },
         }
@@ -103,15 +103,35 @@ export default function MakeModelSearch() {
     } catch (error) {
       console.error("Failed to search:", error);
     }
+
+    // {new Date(result.lastUpdated).toLocaleString("en-US", {
+    //   year: "numeric",
+    //   month: "long",
+    //   day: "numeric",
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    //   second: "2-digit",
+    //   hour12: true,
+    // })}
+
+    // const searchData = {
+    //   labels: ['Jan', 'Feb', 'Mar', 'Apr'], // X-axis labels
+    //   products: [
+    //     { name: 'Product A', history: [10, 20, 15, 25], color: '#FF5733' },
+    //     { name: 'Product B', history: [5, 15, 10, 20], color: '#33FF57' },
+    //     { name: 'Product C', history: [12, 25, 20, 30], color: '#3357FF' },
+    //   ],
+    // };
+    
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 text-sm sm:px-8 md:px-16 lg:pt-14 pt-20 ">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 text-sm sm:px-8 bg-white md:px-16 lg:pt-14 pt-20 ">
       {/* <hr className="w-full border-gray-200" /> */}
       <div className="w-1/2">
         <div className="flex w-full flex-col  gap-5 py-3 bg-yellow-40 lg:px-20">
-        <div className="font-bold flex flex-col h- py-2 shadow rounded-3xl gap-2 bg-gray-100 items-center w-full mx-auto px-2 sm:mx-0">
-          <h2>Select search type</h2>
+          <div className="font-bold flex flex-col h- py-2 shadow rounded-3xl gap-2 bg-gray-100 items-center w-full mx-auto px-2 sm:mx-0">
+            <h2>Select search type</h2>
             <select
               className="px-2 py-2 rounded-full font-semibold w-full  border"
               onChange={handleSearchTypeChange}
@@ -221,7 +241,7 @@ export default function MakeModelSearch() {
           <div className="w-full max-w-3xl p-6 rounded-3xl shadow-md bg-gray-100">
             <h2 className="text-xl font-bold mb-4">Search Results</h2>
             {searchResults.length > 0 ? (
-              <table className="table-auto w-full border-collapse bg-white border border-gray-200">
+              <table id="content" className="table-auto w-full border-collapse bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="border border-gray-300 px-4 py-2">S.No.</th>
@@ -285,6 +305,19 @@ export default function MakeModelSearch() {
             )}
           </div>
         </div>
+
+        {/* <div> */}
+          {/* <h1>Search Trends</h1> */}
+          {/* <ProductTrendChart searchData={searchData} /> */}
+        {/* </div> */}
+
+        <DownloadPDF
+        contentId="content"
+        filename="PriceBenchmarking"
+        headerText="Price Benchmarking Report"
+        footerText={`Generated on: ${new Date().toLocaleString()}`}    
+        
+      />
       </div>
     </div>
   );
