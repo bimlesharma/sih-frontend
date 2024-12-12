@@ -21,11 +21,36 @@ export default function MakeModelSearch() {
   const [isSearchSubmitted, setIsSearchSubmitted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(false);
   const [categories, setCategories] = useState({});
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterText, setFilterText] = useState("");
   const [specifications, setSpecifications] = useState([]);
   const [searchType, setSearchType] = useState("");
 
   const router = useRouter();
   const pathname = usePathname();
+
+  
+
+  const handleSort = (column) => {
+    const sortedData = [...filteredResults].sort((a, b) => {
+      if (a[column] < b[column]) return sortOrder === "asc" ? -1 : 1;
+      if (a[column] > b[column]) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+    setSearchResults(sortedData); // Update the table data
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const handleFilterChange = (e) => {
+    setFilterText(e.target.value);
+  };
+
+  // Filter the results based on filterText
+  const filteredResults = searchResults.filter((result) =>
+    Object.values(result).some((value) =>
+      String(value).toLowerCase().includes(filterText.toLowerCase())
+    )
+  );
 
   // Fetch the category_specs.json file
   useEffect(() => {
@@ -91,6 +116,8 @@ export default function MakeModelSearch() {
         name: product.name,
         make: product.make,
         model: product.model,
+        rating: product.rating || "N/A",
+        quantity: product.quantity || "1",
         price: product.currentPrice || "N/A", // Add price if available
         source: product.sources?.[0]?.link || "N/A",
         sourceName: product.sources?.[0]?.sourceName || "N/A",
@@ -122,7 +149,26 @@ export default function MakeModelSearch() {
     //     { name: 'Product C', history: [12, 25, 20, 30], color: '#3357FF' },
     //   ],
     // };
-    
+
+    const handleSort = (column) => {
+      const sortedData = [...searchResults].sort((a, b) => {
+        if (a[column] < b[column]) return sortOrder === "asc" ? -1 : 1;
+        if (a[column] > b[column]) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      });
+      setSearchResults(sortedData);
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    };
+
+    const handleFilterChange = (e) => {
+      setFilterText(e.target.value);
+    };
+
+    const filteredResults = searchResults.filter((result) =>
+      Object.values(result).some((value) =>
+        String(value).toLowerCase().includes(filterText.toLowerCase())
+      )
+    );
   };
 
   return (
@@ -240,8 +286,12 @@ export default function MakeModelSearch() {
         <div className="table-auto py-5 w-full border-collapse flex items-center justify-center">
           <div className="w-full max-w-3xl p-6 rounded-3xl shadow-md bg-gray-100">
             <h2 className="text-xl font-bold mb-4">Search Results</h2>
-            {searchResults.length > 0 ? (
-              <table id="content" className="table-auto w-full border-collapse bg-white border border-gray-200">
+
+            {/* {searchResults.length > 0 ? (
+              <table
+                id="content"
+                className="table-auto w-full border-collapse bg-white border border-gray-200"
+              >
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="border border-gray-300 px-4 py-2">S.No.</th>
@@ -250,6 +300,10 @@ export default function MakeModelSearch() {
                     <th className="border border-gray-300 px-4 py-2">Model</th>
                     <th className="border border-gray-300 px-4 py-2">Price</th>
                     <th className="border border-gray-300 px-4 py-2">Source</th>
+                    <th className="border border-gray-300 px-4 py-2">Rating</th>
+                    <th className="border border-gray-300 px-4 py-2">
+                      Quantity
+                    </th>
                     <th className="border border-gray-300 px-4 py-2">
                       Last Updated
                     </th>
@@ -284,6 +338,13 @@ export default function MakeModelSearch() {
                         </a>
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
+                        {result.rating.toFixed(1)}
+                      </td>
+
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.quantity}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
                         {new Date(result.lastUpdated).toLocaleString("en-US", {
                           year: "numeric",
                           month: "long",
@@ -300,24 +361,271 @@ export default function MakeModelSearch() {
               </table>
             ) : (
               <p className="text-center text-gray-500">
-                No results found. Please try another search.
+                Waiting for your search query...
+              </p>
+            )} */}
+
+            {searchResults.length > 0 ? (
+              <table
+                id="content"
+                className="table-auto w-full border-collapse bg-white border border-gray-200"
+              >
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border border-gray-300 px-4 py-2">S.No.</th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("name")}
+                    >
+                      Name{" "}
+                      {sortColumn === "name" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("make")}
+                    >
+                      Make{" "}
+                      {sortColumn === "make" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("model")}
+                    >
+                      Model{" "}
+                      {sortColumn === "model" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("price")}
+                    >
+                      Price{" "}
+                      {sortColumn === "price" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th className="border border-gray-300 px-4 py-2">Source</th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("rating")}
+                    >
+                      Rating{" "}
+                      {sortColumn === "rating" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("quantity")}
+                    >
+                      Quantity{" "}
+                      {sortColumn === "quantity" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2 cursor-pointer"
+                      onClick={() => handleSort("lastUpdated")}
+                    >
+                      Last Updated{" "}
+                      {sortColumn === "lastUpdated" &&
+                        (sortOrder === "asc" ? "▲" : "▼")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchResults.map((result, index) => (
+                    <tr key={result.id} className="text-center">
+                      <td className="border border-gray-300 px-4 py-2">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.name}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.make}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.model}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.price !== "N/A" ? `₹${result.price}` : ""}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <a
+                          href={result.source}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:underline"
+                        >
+                          {result.sourceName}
+                        </a>
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.rating.toFixed(1)}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.quantity}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(result.lastUpdated).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: true,
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-center text-gray-500">
+                Waiting for your search query...
               </p>
             )}
+
+            {/* {searchResults.length && filteredResults.length > 0 ? (
+              <table
+                id="content"
+                className="table-auto w-full border-collapse bg-white border border-gray-200"
+              >
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("id")}
+                    >
+                      S.No.
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("name")}
+                    >
+                      Name
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("make")}
+                    >
+                      Make
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("model")}
+                    >
+                      Model
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("price")}
+                    >
+                      Price
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("source")}
+                    >
+                      Source
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("rating")}
+                    >
+                      Rating
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("quantity")}
+                    >
+                      Quantity
+                    </th>
+                    <th
+                      className="border border-gray-300 px-4 py-2"
+                      onClick={() => handleSort("lastUpdated")}
+                    >
+                      Last Updated
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredResults.map((result) => (
+                    <tr key={result.id} className="text-center">
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.id}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.name}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.make}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.model}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.price !== "N/A" ? `₹${result.price}` : ""}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        <a
+                          href={result.source}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:underline"
+                        >
+                          {result.sourceName}
+                        </a>
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.rating}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {result.quantity}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2">
+                        {new Date(result.lastUpdated).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: true,
+                        })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-center text-gray-500">
+                Waiting for your search query...
+              </p>
+            )} */}
           </div>
         </div>
 
         {/* <div> */}
-          {/* <h1>Search Trends</h1> */}
-          {/* <ProductTrendChart searchData={searchData} /> */}
+        {/* <h1>Search Trends</h1> */}
+        {/* <ProductTrendChart searchData={searchData} /> */}
         {/* </div> */}
 
         <DownloadPDF
-        contentId="content"
-        filename="PriceBenchmarking"
-        headerText="Price Benchmarking Report"
-        footerText={`Generated on: ${new Date().toLocaleString()}`}    
-        
-      />
+          contentId="content"
+          filename="PriceBenchmarking"
+          headerText="Price Benchmarking Report"
+          backgroundImage="/img/report-bg.png"
+          footerText={`Generated on: ${new Date().toLocaleString()}`}
+        />
+
+        {/* <DownloadPDF
+          contentId="content-to-pdf"
+          filename="StyledReport"
+          backgroundImage="/img/report-bg.jpg"
+          page={true}
+        /> */}
       </div>
     </div>
   );
